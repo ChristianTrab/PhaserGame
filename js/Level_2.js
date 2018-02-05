@@ -6,8 +6,6 @@ function preload() {
     game.load.image('ground', 'assets/platform.png');
     game.load.image('star', 'assets/star.png');
     game.load.spritesheet('dude', 'assets/dude.png', 32, 48);
-	//Loads the level_1 json
-	this.load.text('level1', 'assets/data/level1.json');
 
 }
 
@@ -25,17 +23,11 @@ var stars;
 var score;
 var scoreText;
 var succeededText;
-var scoreToWin;
 
 var newLevel;
 
 function create() {
-	//Loads the json for level_1
-	this.levelData = JSON.parse(this.game.cache.getText('level1'));
 	
-	console.log(this.levelData);
-	
-	//Style for completed level text
 	var style = { font: "bold 32px Arial", fill: "#fff", boundsAlignH: "center", boundsAlignV: "middle" };
 
     //  We're going to be using physics, so enable the Arcade Physics system
@@ -60,17 +52,14 @@ function create() {
     ground.body.immovable = true;
 
     //  Now let's create two ledges
-	this.levelData.platformData.forEach(function(element){
-		platforms.create(element.x, element.y, 'ground');
-	}, this);
-	
-	//Sets the platform to not falling onto our heads
-	platforms.setAll('body.immovable', true);
+    var ledge = platforms.create(400, 400, 'ground');
+    ledge.body.immovable = true;
 
-	
-	// The player and its settings
-	player = game.add.sprite(this.levelData.playerStart.x, this.levelData.playerStart.y, 'dude');
-	
+    ledge = platforms.create(-150, 250, 'ground');
+    ledge.body.immovable = true;
+
+    // The player and its settings
+    player = game.add.sprite(32, game.world.height - 150, 'dude');
 
     //  We need to enable physics on the player
     game.physics.arcade.enable(player);
@@ -91,10 +80,10 @@ function create() {
     stars.enableBody = true;
 
     //  Here we'll create 12 of them evenly spaced apart
-    for (var i = 0; i < this.levelData.starData.amount; i++)
+    for (var i = 0; i < 10; i++)
     {
         //  Create a star inside of the 'stars' group
-        var star = stars.create(i * this.levelData.starData.spacing, 0, 'star');
+        var star = stars.create(i * 70, 0, 'star');
 
         //  Let gravity do its thing
         star.body.gravity.y = 300;
@@ -116,12 +105,7 @@ function create() {
 	//Enter key
 	enterKey = game.input.keyboard.addKey(Phaser.Keyboard.ENTER);
 	
-	// Sets the score to 0
 	score = 0;
-	
-	//Creates the next level
-	scoreToWin = this.levelData.starData.amount * 10;
-	
     
 }
 
@@ -181,15 +165,6 @@ function collectStar (player, star) {
 
 }
 
-
- // function completedLevel(player, score) {
-	 // if(score == scoreToWin) {
-	 // succeededText.text = 'You Succeeded with: ' + score + ' points! \n        Press Enter to advance';
-	 // } else {
-		 // //Do nothing
-	 // }
- // }
-
  function completedLevel(player, score) {
 	 if(score == 10) {
 	 succeededText.text = 'You Succeeded with: ' + score + ' points! \n        Press Enter to advance';
@@ -197,7 +172,6 @@ function collectStar (player, star) {
 		 //Do nothing
 	 }
  }
-
 
 
  function nextLevel(player, score) {
