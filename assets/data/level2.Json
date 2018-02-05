@@ -1,0 +1,8 @@
+{
+	"playerStart": {"x": 32, "y": 450},
+	"starData": {"amount": 10, "spacing": 70},
+	"platformData": [
+		{"x":250, "y":250},
+		{"x":400, "y":400}
+	]
+}

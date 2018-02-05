@@ -8,6 +8,7 @@ function preload() {
     game.load.spritesheet('dude', 'assets/dude.png', 32, 48);
 	//Loads the level_1 json
 	this.load.text('level1', 'assets/data/level1.json');
+	this.load.text('level2', 'assets/data/level2.json');
 
 }
 
@@ -27,11 +28,11 @@ var scoreText;
 var succeededText;
 var scoreToWin;
 
-var newLevel;
+var currentLevel = 1;
 
 function create() {
 	//Loads the json for level_1
-	this.levelData = JSON.parse(this.game.cache.getText('level1'));
+	this.levelData = JSON.parse(this.game.cache.getText('level' + currentLevel));
 	
 	console.log(this.levelData);
 	
@@ -203,6 +204,13 @@ function collectStar (player, star) {
  function nextLevel(player, score) {
 	if(score >= 10 && enterKey.isDown) {
 		//Do shit
+		if(currentLevel < 2)
+		{
+			currentLevel++;	
+		}
+		else{
+			currentLevel = 1;
+		}
 		game.state.restart();
 		
 	}
