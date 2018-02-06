@@ -6,6 +6,7 @@ function preload() {
     game.load.image('ground', 'assets/platform.png');
     game.load.image('star', 'assets/star.png');
     game.load.spritesheet('dude', 'assets/dude.png', 32, 48);
+	game.load.image('ghost', 'assets/images/ghost.png');
 	//Loads the level_1 json
 	this.load.text('level1', 'assets/data/level1.json');
 	this.load.text('level2', 'assets/data/level2.json');
@@ -15,7 +16,6 @@ function preload() {
 
 //Key bindings
 var enterKey;
-
 
 //Variables
 var player;
@@ -27,12 +27,17 @@ var score;
 var scoreText;
 var succeededText;
 var scoreToWin;
+var playerStartX;
+var playerStartY;
 
 var currentLevel = 1;
 
 function create() {
 	//Loads the json for level_1
 	this.levelData = JSON.parse(this.game.cache.getText('level' + currentLevel));
+	
+	playerStartX = this.levelData.playerStart.x;
+	playerStartY = this.levelData.playerStart.y;
 	
 	console.log(this.levelData);
 	
@@ -77,7 +82,7 @@ function create() {
     game.physics.arcade.enable(player);
 
     //  Player physics properties. Give the little guy a slight bounce.
-    player.body.bounce.y = 0.2;
+    player.body.bounce.y = 0.05;
     player.body.gravity.y = 300;
     player.body.collideWorldBounds = true;
 
@@ -87,6 +92,7 @@ function create() {
 
     //  Finally some stars to collect
     stars = game.add.group();
+	enemies = game.add.group();
 
     //  We will enable physics for any star that is created in this group
     stars.enableBody = true;
@@ -104,6 +110,32 @@ function create() {
         star.body.bounce.y = 0.7 + Math.random() * 0.2;
     }
 
+	//enemies creation
+	
+	enemies.enableBody = true;
+	// this.levelData.enemyData.forEach(function (element) {
+		// enemies.create(new EnemyGhost(0, game, element.x, element.y, element.direction, element.length, element.speed));
+	// }, this);
+	
+	this.levelData.enemyData.forEach(function (element) {
+		var enemyProp = enemies.create(element.x, element.y, 'ghost');
+		enemyProp.anchor.setTo(0.5, 0.5);
+		enemyProp.scale.setTo(0.1);
+		direction = element.direction;
+		length = element.length;
+		speed = element.speed;
+		if(direction == 1)
+		{
+			enemyProp.ghostTween = game.add.tween(enemyProp).to({
+			y: enemyProp.y + length}, speed, 'Linear', true, 0, 100, true);
+		}
+		else if (direction == 2)
+		{
+			enemyProp.ghostTween = game.add.tween(enemyProp).to({
+			x: enemyProp.x + length}, speed, 'Linear', true, 0, 100, true);
+		}
+	}, this);
+	
     //  The score
     scoreText = game.add.text(16, 16, 'score: 0', { fontSize: '32px', fill: '#000' });
 
@@ -122,22 +154,28 @@ function create() {
 	
 	//Creates the next level
 	scoreToWin = this.levelData.starData.amount * 10;
+	game.world.setBounds(0,0, 1200, 600);
 	
-    
-}
+	game.camera.follow(player);
+};
 
 function update() {
 
     //  Collide the player and the stars with the platforms
     var hitPlatform = game.physics.arcade.collide(player, platforms);
     game.physics.arcade.collide(stars, platforms);
+	
+	// if(game.physics.arcade.collide(enemies, player)){
+		// ResetPlayer();
+	// }
 
     //  Checks to see if the player overlaps with any of the stars, if he does call the collectStar function
     game.physics.arcade.overlap(player, stars, collectStar, null, this);
-
+	game.physics.arcade.overlap(player, enemies, ResetPlayer, null, this);
+	
     //  Reset the players velocity (movement)
     player.body.velocity.x = 0;
-
+	
     if (cursors.left.isDown)
     {
         //  Move to the left
@@ -167,6 +205,12 @@ function update() {
     }
 
 	 nextLevel(player, score);
+};
+
+function ResetPlayer()
+{
+	console.log("Killed");
+	game.state.restart();
 }
 
 function collectStar (player, star) {
@@ -180,7 +224,7 @@ function collectStar (player, star) {
 	completedLevel(player, score);
 	
 
-}
+};
 
 
  // function completedLevel(player, score) {
@@ -197,9 +241,7 @@ function collectStar (player, star) {
 	 } else {
 		 //Do nothing
 	 }
- }
-
-
+ };
 
  function nextLevel(player, score) {
 	if(score >= 10 && enterKey.isDown) {
@@ -212,6 +254,5 @@ function collectStar (player, star) {
 			currentLevel = 1;
 		}
 		game.state.restart();
-		
-	}
+	};
 }

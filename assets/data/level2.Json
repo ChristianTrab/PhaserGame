@@ -4,5 +4,9 @@
 	"platformData": [
 		{"x":250, "y":250},
 		{"x":400, "y":400}
+	],
+	"enemyData": [
+		{"x":420, "y":380, "direction": 2, "length": 350, "speed": 2000},
+		{"x":260, "y":230, "direction": 2, "length": 350, "speed": 2000}
 	]
 }
