@@ -7,12 +7,15 @@ function preload() {
     game.load.image('star', 'assets/star.png');
     game.load.spritesheet('dude', 'assets/dude.png', 32, 48);
 	game.load.image('ghost', 'assets/images/ghost.png');
-	game.load.image('tiles', 'assets/images/generic_platformer_tiles.png');
+	
 	//Loads the level_1 json
 	this.load.text('level1', 'assets/data/level1.json');
 	this.load.text('level2', 'assets/data/level2.json');
-	this.load.text('testData', 'assets/data/test.json');
-	game.load.tilemap('test', 'assets/data/test.json', null, Phaser.Tilemap.TILED_JSON);
+	
+	//tiled map information
+	this.load.text('tiledData1', 'assets/data/tiled1.json');
+	game.load.tilemap('tiledMap1', 'assets/data/tiled1.json', null, Phaser.Tilemap.TILED_JSON);
+	game.load.image('tiles', 'assets/images/generic_platformer_tiles.png');
 
 }
 
@@ -36,38 +39,36 @@ var playerStartX;
 var playerStartY;
 
 var currentLevel = 1;
+var totalLevels = 1;
 
 var levelData;
 
 function create() {
 	
-	this.levelData = JSON.parse(this.game.cache.getText('testData'));
-	this.map = game.add.tilemap('test');
-	this.map.addTilesetImage('generic_platformer_tiles', 'tiles');
+	levelData = JSON.parse(this.game.cache.getText('tiledData' + currentLevel));
+	map = game.add.tilemap('tiledMap' + currentLevel);
+	map.addTilesetImage('generic_platformer_tiles', 'tiles');
 
-	layer = this.map.createLayer('Background');
+	layer = map.createLayer('background');
+	layer = map.createLayer('midground');
 	
 	
 	var collision_tiles = [];
-	this.levelData.layers[1].data.forEach(function(element){
+	levelData.layers[2].data.forEach(function(element){
 	if(element >= 0 && collision_tiles.indexOf(element) === -1){
 		collision_tiles.push(element);
-		console.log(element);
 	 }
 	}, this);
-	this.map.setCollision(collision_tiles, true, 'Collision');
+	map.setCollision(collision_tiles, true, 'collision');
 	
-	this.collisionLayer = this.map.createLayer('Collision');
-	this.map.setLayer('Collision');
+	collisionLayer = map.createLayer('collision');
+	map.setLayer('collision');
 	layer.resizeWorld();
+
 	
+	//playerStartX = levelData.playerStart.x;
+	//playerStartY = levelData.playerStart.y;
 	
-	
-	playerStartX = this.levelData.playerStart.x;
-	playerStartY = this.levelData.playerStart.y;
-	
-	console.log(this.levelData);
-	console.log(this.map.currentLayer);
 	
 	//Style for completed level text
 	var style = { font: "bold 32px Arial", fill: "#fff", boundsAlignH: "center", boundsAlignV: "middle" };
@@ -75,26 +76,6 @@ function create() {
     //  We're going to be using physics, so enable the Arcade Physics system
     game.physics.startSystem(Phaser.Physics.ARCADE);
 	
-	// var collision_tiles;
-    // map.layers.forEach(function (layer) {
-        // this.layers[layer.name] = map.createLayer(layer.name);
-        // if (layer.properties.collision) { // collision layer
-            // collision_tiles = [];
-            // layer.data.forEach(function (data_row) { // find tiles used in the layer
-                // data_row.forEach(function (tile) {
-                    // // check if it's a valid tile index and isn't already in the list
-                    // if (tile.index > 0 && ) {
-                        // collision_tiles.push(tile.index);
-                    // }
-                // }, this);
-            // }, this);
-            // map.setCollision(collision_tiles, true, layer.name);
-        // }
-    // }, this);
-    // // resize the world to be the size of the current layer
-    // this.layers[this.map.layer.name].resizeWorld();
-
-    //  A simple background for our game
 
     //  The platforms group contains the ground and the 2 ledges we can jump on
     platforms = game.add.group();
@@ -109,7 +90,7 @@ function create() {
 
 	
 	// The player and its settings
-	player = game.add.sprite(this.levelData.playerStart.x, this.levelData.playerStart.y, 'dude');
+	player = game.add.sprite(levelData.playerStart.x, levelData.playerStart.y, 'dude');
 	
 
     //  We need to enable physics on the player
@@ -132,10 +113,10 @@ function create() {
     stars.enableBody = true;
 
     //  Here we'll create 12 of them evenly spaced apart
-    for (var i = 0; i < this.levelData.starData.amount; i++)
+    for (var i = 0; i < levelData.starData.amount; i++)
     {
         //  Create a star inside of the 'stars' group
-        var star = stars.create(i * this.levelData.starData.spacing, 0, 'star');
+        var star = stars.create(i * levelData.starData.spacing, 0, 'star');
 
         //  Let gravity do its thing
         star.body.gravity.y = 300;
@@ -151,7 +132,7 @@ function create() {
 		// enemies.create(new EnemyGhost(0, game, element.x, element.y, element.direction, element.length, element.speed));
 	// }, this);
 	
-	this.levelData.enemyData.forEach(function (element) {
+	levelData.enemyData.forEach(function (element) {
 		var enemyProp = enemies.create(element.x, element.y, 'ghost');
 		enemyProp.anchor.setTo(0.5, 0.5);
 		enemyProp.scale.setTo(0.1);
@@ -172,6 +153,7 @@ function create() {
 	
     //  The score
     scoreText = game.add.text(16, 16, 'score: 0', { fontSize: '32px', fill: '#000' });
+	scoreText.fixedToCamera = true;
 
     //  Our controls.
     cursors = game.input.keyboard.createCursorKeys();
@@ -179,6 +161,7 @@ function create() {
 	//Succeed Text
 	succeededText = game.add.text(0, 0, '', style);
 	succeededText.setTextBounds(0, 100, 800, 100);
+	succeededText.fixedToCamera = true;
 	
 	//Enter key
 	enterKey = game.input.keyboard.addKey(Phaser.Keyboard.ENTER);
@@ -187,8 +170,8 @@ function create() {
 	score = 0;
 	
 	//Creates the next level
-	scoreToWin = this.levelData.starData.amount * 10;
-	// game.world.setBounds(0,0, 1200, 600);
+	scoreToWin = levelData.starData.amount * 10;
+
 	
 	game.camera.follow(player);
 };
@@ -196,9 +179,8 @@ function create() {
 function update() {
 
     //  Collide the player and the stars with the platforms
-    var hitPlatform = game.physics.arcade.collide(this.player, this.collisionLayer);
-	console.log(this.collisionLayer);
-    game.physics.arcade.collide(this.stars, this.collisionLayer);
+    var hitPlatform = game.physics.arcade.collide(player, collisionLayer);
+    game.physics.arcade.collide(stars, collisionLayer);
 	
 	// if(game.physics.arcade.collide(enemies, player)){
 		// ResetPlayer();
@@ -210,6 +192,12 @@ function update() {
 	
     //  Reset the players velocity (movement)
     player.body.velocity.x = 0;
+	
+	if (cursors.down.isDown)
+    {
+        scoreText.text = player.x + ' ' + (player.y +24)
+    }
+	
 	
     if (cursors.left.isDown)
     {
@@ -234,12 +222,17 @@ function update() {
     }
     
     //  Allow the player to jump if they are touching the ground.
-    if (cursors.up.isDown && player.body.touching.down && hitPlatform)
+    if (cursors.up.isDown && player.body.onFloor())//&& player.body.touching.down)
     {
         player.body.velocity.y = -350;
     }
+	
+	if (player.bottom >= game.world.height) {
+        ResetPlayer();
+    }
 
 	 nextLevel(player, score);
+
 };
 
 function ResetPlayer()
@@ -281,7 +274,7 @@ function collectStar (player, star) {
  function nextLevel(player, score) {
 	if(score >= 10 && enterKey.isDown) {
 		//Do shit
-		if(currentLevel < 2)
+		if(currentLevel < totalLevels)
 		{
 			currentLevel++;	
 		}
