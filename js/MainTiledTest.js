@@ -44,6 +44,8 @@ var stars;
 var score;
 var scoreText;
 var succeededText;
+var deathCount = 0;
+var deathCountText;
 var scoreToWin;
 var playerStartX;
 var playerStartY;
@@ -162,7 +164,7 @@ function create() {
 	}, this);
 	
     //  The score
-    scoreText = game.add.text(16, 16, 'score: 0', { fontSize: '32px', fill: '#000' });
+    scoreText = game.add.text(16, 16, 'score: 0', { fontSize: '24px', fill: '#000' });
 	scoreText.fixedToCamera = true;
 
     //  Our controls.
@@ -172,6 +174,11 @@ function create() {
 	succeededText = game.add.text(0, 0, '', style);
 	succeededText.setTextBounds(0, 100, 800, 100);
 	succeededText.fixedToCamera = true;
+	
+	//Death Counter text
+	deathCountText = game.add.text(665,16, 'deaths: ' + deathCount, { fontSize: '24px', fill: '#000' });
+	deathCountText.fixedToCamera = true;
+	
 	
 	//Enter key
 	enterKey = game.input.keyboard.addKey(Phaser.Keyboard.ENTER);
@@ -249,6 +256,7 @@ function update() {
 function ResetPlayer()
 {
 	console.log("Killed");
+	deathCount++;
 	game.state.restart();
 }
 
@@ -284,7 +292,7 @@ function collectStar (player, star) {
  };
 
  function nextLevel(player, score) {
-	if(score >= 10 && enterKey.isDown) {
+	if(score >= 100 && enterKey.isDown) {
 		//Do shit
 		if(currentLevel < totalLevels)
 		{
