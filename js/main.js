@@ -37,6 +37,8 @@ function create() {
 	this.levelData = JSON.parse(this.game.cache.getText('level' + currentLevel));
 	playerStartX = this.levelData.playerStart.x;
 	playerStartY = this.levelData.playerStart.y;
+	game.world.setBounds(0,0, this.levelData.GameSize.x, this.levelData.GameSize.y);
+	game.scale.setGameSize(this.levelData.GameSize.x, this.levelData.GameSize.y);
 	console.log(this.levelData);
 	
 	//Style for completed level text
@@ -45,7 +47,10 @@ function create() {
     //  We're going to be using physics, so enable the Arcade Physics system
     game.physics.startSystem(Phaser.Physics.ARCADE);
 
-	
+    //  A simple background for our game
+    var background = game.add.sprite(0, 0, 'sky');
+	background.scale.setTo(this.game.width/800, this.game.height/600);
+
     //  The platforms group contains the ground and the 2 ledges we can jump on
     platforms = game.add.group();
 
