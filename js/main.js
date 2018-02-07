@@ -77,14 +77,75 @@ function create() {
 
     //  Scale it to fit the width of the game (the original sprite is 400x32 in size)
     ground.scale.setTo(2, 2);
+	
 
     //  This stops it from falling away when you jump on it
     ground.body.immovable = true;
 
     //  Now let's create two ledges
 	this.levelData.platformData.forEach(function(element){
-		platforms.create(element.x, element.y, 'ground');
+		if(element.type == 1){
+		var ground1 = platforms.create(element.x, element.y, 'ground1');		
+		ground1.scale.setTo(0.25, 0.25);
+		}
+		else if(element.type == 2){
+		var ground2 = platforms.create(element.x, element.y, 'ground2');		
+		ground2.scale.setTo(0.25, 0.25);
+		}
+		else if(element.type == 3){
+		var ground3 = platforms.create(element.x, element.y, 'ground3');		
+		ground3.scale.setTo(0.25, 0.25);
+		}
+		else if(element.type == 4){
+		var ground4 = platforms.create(element.x, element.y, 'ground4');		
+		ground4.scale.setTo(0.25, 0.25);
+		}
+		else if(element.type == 5){
+		var ground5 = platforms.create(element.x, element.y, 'ground5');		
+		ground5.scale.setTo(0.25, 0.25);
+		}
+		else if(element.type == 6){
+		var ground6 = platforms.create(element.x, element.y, 'ground6');		
+		ground6.scale.setTo(0.25, 0.25);
+		}
+		else if(element.type == 7){
+		var ground7 = platforms.create(element.x, element.y, 'ground7');		
+		ground7.scale.setTo(0.25, 0.25);
+		}
+		else if(element.type == 8){
+		var ground8 = platforms.create(element.x, element.y, 'ground8');		
+		ground8.scale.setTo(0.25, 0.25);
+		}
+		else if(element.type == 9){
+		var ground9 = platforms.create(element.x, element.y, 'ground9');		
+		ground9.scale.setTo(0.25, 0.25);
+		}
+		else if(element.type == 10){
+		var groundIce1 = platforms.create(element.x, element.y, 'groundIce1');		
+		groundIce1.scale.setTo(0.25, 0.25);
+		}
+		else if(element.type == 11){
+		var groundIce2 = platforms.create(element.x, element.y, 'groundIce2');		
+		groundIce2.scale.setTo(0.25, 0.25);
+		}
+		else if(element.type == 12){
+		var groundIce3 = platforms.create(element.x, element.y, 'groundIce3');		
+		groundIce3.scale.setTo(0.25, 0.25);
+		}
+		else if(element.type == 13){
+		var groundr = platforms.create(element.x, element.y, 'groundr');		
+		groundr.scale.setTo(0.25, 0.25);
+		}
+		else if(element.type == 14){
+		var ice = platforms.create(element.x, element.y, 'ice');		
+		ice.scale.setTo(0.25, 0.25);
+		}
+		else if(element.type == 15){
+		var ground = platforms.create(element.x, element.y, 'ground');		
+		}
 	}, this);
+	
+	
 	
 	//Sets the platform to not falling onto our heads
 	platforms.setAll('body.immovable', true);
