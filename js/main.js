@@ -7,6 +7,21 @@ function preload() {
     game.load.image('star', 'assets/star.png');
     game.load.spritesheet('dude', 'assets/dude.png', 32, 48);
 	game.load.image('ghost', 'assets/images/ghost.png');
+	game.load.image('ground0', 'assets/tiles/ground0.png');
+	game.load.image('ground1', 'assets/tiles/ground1.png');
+	game.load.image('ground2', 'assets/tiles/ground2.png');
+	game.load.image('ground3', 'assets/tiles/ground3.png');
+	game.load.image('ground4', 'assets/tiles/ground4.png');
+	game.load.image('ground5', 'assets/tiles/ground5.png');
+	game.load.image('ground6', 'assets/tiles/ground6.png');
+	game.load.image('ground7', 'assets/tiles/ground7.png');
+	game.load.image('ground8', 'assets/tiles/ground8.png');
+	game.load.image('ground9', 'assets/tiles/ground9.png');
+	game.load.image('groundIce1', 'assets/tiles/groundIce1.png');
+	game.load.image('groundIce2', 'assets/tiles/groundIce2.png');
+	game.load.image('groundIce3', 'assets/tiles/groundIce3.png');
+	game.load.image('groundr', 'assets/tiles/groundr.png');
+	game.load.image('ice', 'assets/tiles/ice.png');
 	//Loads the level_1 json
 	this.load.text('level1', 'assets/data/level1.json');
 	this.load.text('level2', 'assets/data/level2.json');
@@ -247,7 +262,7 @@ function collectStar (player, star) {
  function nextLevel(player, score) {
 	if(score >= 10 && enterKey.isDown) {
 		//Do shit
-		if(currentLevel < 2)
+		if(currentLevel < 10)
 		{
 			currentLevel++;	
 		}
