@@ -73,14 +73,14 @@ function create() {
     platforms.enableBody = true;
 
     // Here we create the ground.
-    var ground = platforms.create(0, game.world.height - 64, 'ground');
+    //var ground = platforms.create(0, game.world.height - 64, 'ground1');
 
     //  Scale it to fit the width of the game (the original sprite is 400x32 in size)
-    ground.scale.setTo(2, 2);
+    //ground.scale.setTo(2, 2);
 	
 
     //  This stops it from falling away when you jump on it
-    ground.body.immovable = true;
+    
 
     //  Now let's create two ledges
 	this.levelData.platformData.forEach(function(element){
@@ -141,7 +141,9 @@ function create() {
 		ice.scale.setTo(0.25, 0.25);
 		}
 		else if(element.type == 15){
-		var ground = platforms.create(element.x, element.y, 'ground');		
+		var ground = platforms.create(element.x, game.world.height - 64, 'ground');		
+		ground.body.immovable = true;
+		ground.scale.setTo(0.25, 0.25)
 		}
 	}, this);
 	
