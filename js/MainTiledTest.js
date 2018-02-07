@@ -9,12 +9,22 @@ function preload() {
 	game.load.image('ghost', 'assets/images/ghost.png');
 	
 	//Loads the level_1 json
-	this.load.text('level1', 'assets/data/level1.json');
-	this.load.text('level2', 'assets/data/level2.json');
+	//this.load.text('level1', 'assets/data/level1.json');
+	//this.load.text('level2', 'assets/data/level2.json');
 	
 	//tiled map information
 	this.load.text('tiledData1', 'assets/data/tiled1.json');
 	game.load.tilemap('tiledMap1', 'assets/data/tiled1.json', null, Phaser.Tilemap.TILED_JSON);
+	
+	this.load.text('tiledData2', 'assets/data/tiled2.json');
+	game.load.tilemap('tiledMap2', 'assets/data/tiled2.json', null, Phaser.Tilemap.TILED_JSON);
+	
+	this.load.text('tiledData3', 'assets/data/tiled3.json');
+	game.load.tilemap('tiledMap3', 'assets/data/tiled3.json', null, Phaser.Tilemap.TILED_JSON);
+	
+	this.load.text('tiledData4', 'assets/data/tiled4.json');
+	game.load.tilemap('tiledMap4', 'assets/data/tiled4.json', null, Phaser.Tilemap.TILED_JSON);
+	
 	game.load.image('tiles', 'assets/images/generic_platformer_tiles.png');
 
 }
@@ -39,7 +49,7 @@ var playerStartX;
 var playerStartY;
 
 var currentLevel = 1;
-var totalLevels = 1;
+var totalLevels = 4;
 
 var levelData;
 
@@ -193,10 +203,11 @@ function update() {
     //  Reset the players velocity (movement)
     player.body.velocity.x = 0;
 	
-	if (cursors.down.isDown)
-    {
-        scoreText.text = player.x + ' ' + (player.y +24)
-    }
+	//Used to check x and y co-ordinates to place enemies
+	// if (cursors.down.isDown)
+    // {
+        // scoreText.text = player.x + ' ' + (player.y +24)
+    // }
 	
 	
     if (cursors.left.isDown)
@@ -264,8 +275,9 @@ function collectStar (player, star) {
  // }
 
  function completedLevel(player, score) {
-	 if(score == 10) {
+	 if(score == 100) {
 	 succeededText.text = 'You Succeeded with: ' + score + ' points! \n        Press Enter to advance';
+	 scoreText.text = 'Level by ' + levelData.author;
 	 } else {
 		 //Do nothing
 	 }

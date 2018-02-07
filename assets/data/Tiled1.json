@@ -1,10 +1,18 @@
-{ "height":25,
+{ 
+ "author": "Sangey Lama",
+ "height":25,
  "infinite":false,
  "playerStart": {"x": 1, "y": 500},
  "starData": {"amount": 30, "spacing": 150},
  "enemyData": [
 		{"x":1470, "y":712, "direction": 2, "length": 350, "speed": 1500},
 		{"x":762, "y":616, "direction": 2, "length": 350, "speed": 2000},
+		{"x":788, "y":200, "direction": 2, "length": 350, "speed": 2000},
+		{"x":1653, "y":160, "direction": 1, "length": 350, "speed": 1500},
+		{"x":2350, "y":144, "direction": 1, "length": 350, "speed": 1500},
+		{"x":2653, "y":104, "direction": 2, "length": 350, "speed": 2000},
+		{"x":2504, "y":584, "direction": 2, "length": 350, "speed": 2000},
+		{"x":2137, "y":584, "direction": 2, "length": 350, "speed": 2000},
 		{"x":506, "y":648, "direction": 2, "length": 230, "speed": 2000}
 	],
  "layers":[
@@ -64,4 +72,5 @@
  "type":"map",
  "version":1,
  "width":100
+
 }
