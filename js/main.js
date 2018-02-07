@@ -35,10 +35,8 @@ var currentLevel = 1;
 function create() {
 	//Loads the json for level_1
 	this.levelData = JSON.parse(this.game.cache.getText('level' + currentLevel));
-	
 	playerStartX = this.levelData.playerStart.x;
 	playerStartY = this.levelData.playerStart.y;
-	
 	console.log(this.levelData);
 	
 	//Style for completed level text
@@ -47,9 +45,7 @@ function create() {
     //  We're going to be using physics, so enable the Arcade Physics system
     game.physics.startSystem(Phaser.Physics.ARCADE);
 
-    //  A simple background for our game
-    game.add.sprite(0, 0, 'sky');
-
+	
     //  The platforms group contains the ground and the 2 ledges we can jump on
     platforms = game.add.group();
 
@@ -154,7 +150,7 @@ function create() {
 	
 	//Creates the next level
 	scoreToWin = this.levelData.starData.amount * 10;
-	game.world.setBounds(0,0, 1200, 600);
+	
 	
 	game.camera.follow(player);
 };
