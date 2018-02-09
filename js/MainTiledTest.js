@@ -55,6 +55,9 @@ var totalLevels = 4;
 
 var levelData;
 
+var counter = 0;
+var timerText;
+
 function create() {
 	
 	levelData = JSON.parse(this.game.cache.getText('tiledData' + currentLevel));
@@ -76,7 +79,6 @@ function create() {
 	collisionLayer = map.createLayer('collision');
 	map.setLayer('collision');
 	layer.resizeWorld();
-
 	
 	//playerStartX = levelData.playerStart.x;
 	//playerStartY = levelData.playerStart.y;
@@ -164,8 +166,12 @@ function create() {
 	}, this);
 	
     //  The score
-    scoreText = game.add.text(16, 16, 'score: 0', { fontSize: '24px', fill: '#000' });
+    scoreText = game.add.text(16, 16, 'Score: 0', { fontSize: '24px', fill: '#000' });
 	scoreText.fixedToCamera = true;
+	
+	//The timer
+	timerText = game.add.text(28, 45, 'Time: 0', {fontSize: '24px', fill: '#000'});
+	timerText.fixedToCamera = true;
 
     //  Our controls.
     cursors = game.input.keyboard.createCursorKeys();
@@ -189,6 +195,7 @@ function create() {
 	//Creates the next level
 	scoreToWin = levelData.starData.amount * 10;
 
+	game.time.events.loop(Phaser.Timer.SECOND, updateCounter, this);
 	
 	game.camera.follow(player);
 };
@@ -257,6 +264,7 @@ function ResetPlayer()
 {
 	console.log("Killed");
 	deathCount++;
+	counter = 0;
 	game.state.restart();
 }
 
@@ -272,6 +280,12 @@ function collectStar (player, star) {
 	
 
 };
+
+function updateCounter() 
+{
+	counter ++;
+	timerText.text = 'Time: ' + counter;
+}
 
 
  // function completedLevel(player, score) {
