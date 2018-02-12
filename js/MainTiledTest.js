@@ -151,7 +151,7 @@ function create() {
         star.body.gravity.y = 300;
 
         //  This just gives each star a slightly random bounce value
-        star.body.bounce.y = 0.7 + Math.random() * 0.2;
+        star.body.bounce.y = 0.1;
     }
 
 	//enemies creation
@@ -362,6 +362,8 @@ function updateCounter()
 		}
 		else{
 			toggleMusic();
+			death = 0;
+			counter = 0;
 			currentLevel = 1;
 		}
 		game.state.restart();
