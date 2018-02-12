@@ -26,18 +26,21 @@ function preload() {
 	game.load.tilemap('tiledMap4', 'assets/data/tiled4.json', null, Phaser.Tilemap.TILED_JSON);
 	
 	game.load.image('tiles', 'assets/images/generic_platformer_tiles.png');
+	game.load.image('leverImage', 'assets/images/lever.png');
+	game.load.image('doorImage', 'assets/images/door.png');
 	
 	//Game music and audio
 	game.load.audio('backgroundMusic', ['assets/music/falienFunk.mp3', 'assets/music/falienFunk.mp3']);
 	game.load.audio('coin', ['assets/music/coin3.wav' , 'assets/music/coin3.wav']);
 	game.load.audio('dying', ['assets/music/dying.mp3' , 'assets/music/dying.mp3']);
-	
+	game.load.audio('leverAudio', ['assets/music/lever.mp3', 'assets/music/lever.mp3']);
 
 }
 
 
 //Key bindings
 var enterKey;
+var spaceKey;
 
 //Player and game variable
 var player;
@@ -56,6 +59,7 @@ var deathCountText;
 var scoreToWin;
 var playerStartX;
 var playerStartY;
+var scoreToGet = 100;
 
 //Level controller
 var currentLevel = 1;
@@ -72,6 +76,16 @@ var timerText;
 var music;
 var coinSound;
 var death;
+var leverSound;
+
+//Trigger
+var lever;
+var leverStatus = false;
+
+//Door
+var door; 
+var dooStatus = false;
+
 
 function create() {
 	
@@ -115,8 +129,8 @@ function create() {
 	
 	
 	//Sets the platform to not falling onto our heads
-	platforms.setAll('body.immovable', true);
-
+	platforms.setAll('body.immovable', true)
+	
 	
 	// The player and its settings
 	player = game.add.sprite(levelData.playerStart.x, levelData.playerStart.y, 'dude');
@@ -212,6 +226,22 @@ function create() {
 
 	game.time.events.loop(Phaser.Timer.SECOND, updateCounter, this);
 	
+	//Triggering 
+	spaceKey = game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
+	
+	
+	//Add lever
+	lever = game.add.sprite(levelData.leverData.x, levelData.leverData.y, 'leverImage');
+	lever.scale.setTo(0.7);
+	lever.anchor.setTo(0.5,0.5);
+	lever.enableBody = true;
+	leverStatus = false;
+	
+	//Add door
+	door = game.add.sprite(levelData.doorData.x, levelData.doorData.y, 'doorImage');
+	door.scale.setTo(0.5);
+	doorStatus = false;
+	door.enableBody = true;
 	
 	playMusic();
 	addSoundEffects();
@@ -231,6 +261,7 @@ function addSoundEffects()
 {
 	this.coinSound = this.game.add.audio('coin');
 	this.death = this.game.add.audio('dying');
+	this.leverSound = this.game.add.audio('leverAudio');
 }
 
 function toggleMusic()
@@ -300,10 +331,40 @@ function update() {
 	if (player.bottom >= game.world.height) {
         ResetPlayer();
     }
-
-	 nextLevel(player, score);
+	
+	triggerLever();
+	triggerDoor();
+	
+	//nextLevel(player, score);
 
 };
+
+function triggerDoor()
+{
+	if(checkOverlap(player, door) && enterKey.isDown && score >= scoreToGet && leverStatus == true)
+	{
+		nextLevel(player, score);
+	}
+}
+
+function triggerLever()
+{
+	if (checkOverlap(player, lever) && spaceKey.isDown && leverStatus == false)
+	{
+		leverSound.play();
+		this.lever.scale.x*=-1;
+		leverStatus = true;
+		doorStatus = true;
+	}
+}
+
+function checkOverlap(spriteA, spriteB)
+{
+	var boundA = spriteA.getBounds();
+	var boundB = spriteB.getBounds();
+	
+	return Phaser.Rectangle.intersects(boundA, boundB);
+}
 
 function ResetPlayer()
 {
@@ -323,7 +384,7 @@ function collectStar (player, star) {
     //  Add and update the score
     score += 10;
     scoreText.text = 'Score: ' + score;
-	completedLevel(player, score);
+	//completedLevel(player, score);
 	
 
 };
@@ -343,17 +404,17 @@ function updateCounter()
 	 // }
  // }
 
- function completedLevel(player, score) {
-	 if(score == 100) {
-	 succeededText.text = 'You Succeeded with: ' + score + ' points! \n        Press Enter to advance';
-	 scoreText.text = 'Level by ' + levelData.author;
-	 } else {
-		 //Do nothing
-	 }
- };
+ // function completedLevel(player, score) {
+	 // if(score == 100) {
+	 // succeededText.text = 'You Succeeded with: ' + score + ' points! \n        Press Enter to advance';
+	 // scoreText.text = 'Level by ' + levelData.author;
+	 // } else {
+		 // //Do nothing
+	 // }
+ // };
 
  function nextLevel(player, score) {
-	if(score >= 100 && enterKey.isDown) {
+	if(score >= scoreToGet) {
 		//Do shit
 		if(currentLevel < totalLevels)
 		{

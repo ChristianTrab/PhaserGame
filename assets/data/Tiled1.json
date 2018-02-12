@@ -4,6 +4,8 @@
  "infinite":false,
  "playerStart": {"x": 1, "y": 500},
  "starData": {"amount": 30, "spacing": 150},
+ "leverData": {"x": 150, "y": 720},
+ "doorData": {"x": 250, "y": 690},
  "enemyData": [
 		{"x":1470, "y":712, "direction": 2, "length": 350, "speed": 1500},
 		{"x":762, "y":616, "direction": 2, "length": 350, "speed": 2000},

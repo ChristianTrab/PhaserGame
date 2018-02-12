@@ -1,6 +1,8 @@
 {
 	"playerStart": {"x": 10, "y": 500},
 	"starData": {"amount": 12, "spacing": 70},
+	"leverData": {"x": 100, "y": 100},
+	"doorData": {"x": 100, "y": 100},
 	"platformData": [
 	
 		{"x": 0, "y":580, "type": 1},
