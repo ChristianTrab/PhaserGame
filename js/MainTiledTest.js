@@ -26,6 +26,12 @@ function preload() {
 	game.load.tilemap('tiledMap4', 'assets/data/tiled4.json', null, Phaser.Tilemap.TILED_JSON);
 	
 	game.load.image('tiles', 'assets/images/generic_platformer_tiles.png');
+	
+	//Game music and audio
+	game.load.audio('backgroundMusic', ['assets/music/falienFunk.mp3', 'assets/music/falienFunk.mp3']);
+	game.load.audio('coin', ['assets/music/coin3.wav' , 'assets/music/coin3.wav']);
+	game.load.audio('dying', ['assets/music/dying.mp3' , 'assets/music/dying.mp3']);
+	
 
 }
 
@@ -33,13 +39,14 @@ function preload() {
 //Key bindings
 var enterKey;
 
-//Variables
+//Player and game variable
 var player;
 var platforms;
 var cursors;
 var map;
 var collisionLayer;
 
+//Level data
 var stars;
 var score;
 var scoreText;
@@ -50,13 +57,21 @@ var scoreToWin;
 var playerStartX;
 var playerStartY;
 
+//Level controller
 var currentLevel = 1;
 var totalLevels = 4;
 
+//Json data
 var levelData;
 
+//Timer 
 var counter = 0;
 var timerText;
+
+//Music
+var music;
+var coinSound;
+var death;
 
 function create() {
 	
@@ -197,8 +212,38 @@ function create() {
 
 	game.time.events.loop(Phaser.Timer.SECOND, updateCounter, this);
 	
+	
+	playMusic();
+	addSoundEffects();
+	
 	game.camera.follow(player);
 };
+
+
+function playMusic()
+{
+	this.music = this.game.add.audio('backgroundMusic');
+	this.music.play('', 0, 1, true);
+	toggleMusic();
+}
+
+function addSoundEffects()
+{
+	this.coinSound = this.game.add.audio('coin');
+	this.death = this.game.add.audio('dying');
+}
+
+function toggleMusic()
+{
+	if(this.music.isPlaying)
+	{
+		music.pause();
+	}
+	else 
+	{
+		music.resume();
+	}
+}
 
 function update() {
 
@@ -262,9 +307,11 @@ function update() {
 
 function ResetPlayer()
 {
+	death.play();
 	console.log("Killed");
 	deathCount++;
 	counter = 0;
+	toggleMusic();
 	game.state.restart();
 }
 
@@ -272,7 +319,7 @@ function collectStar (player, star) {
     
     // Removes the star from the screen
     star.kill();
-
+	coinSound.play();
     //  Add and update the score
     score += 10;
     scoreText.text = 'Score: ' + score;
@@ -310,9 +357,11 @@ function updateCounter()
 		//Do shit
 		if(currentLevel < totalLevels)
 		{
+			toggleMusic();
 			currentLevel++;	
 		}
 		else{
+			toggleMusic();
 			currentLevel = 1;
 		}
 		game.state.restart();
