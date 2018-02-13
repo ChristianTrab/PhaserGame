@@ -5,6 +5,7 @@ function preload() {
     game.load.image('star', 'assets/images/star.png');
     game.load.spritesheet('dude', 'assets/images/dude.png', 32, 48);
 	game.load.image('ghost', 'assets/images/ghost.png');
+	game.load.image('spikeC', 'assets/images/spike C.png');
 	
 	//tiled map information
 	
@@ -23,6 +24,9 @@ function preload() {
 	//level4
 	this.load.text('tiledData4', 'assets/data/tiled4.json');
 	game.load.tilemap('tiledMap4', 'assets/data/tiled4.json', null, Phaser.Tilemap.TILED_JSON);
+	
+	this.load.text('tiledData100', 'assets/data/tiled100.json');
+	game.load.tilemap('tiledMap100', 'assets/data/tiled100.json', null, Phaser.Tilemap.TILED_JSON);
 	
 	game.load.image('tiles', 'assets/images/generic_platformer_tiles.png');
 
@@ -45,7 +49,7 @@ var succeededText;
 var deathCount = 0;
 var deathCountText;
 
-var currentLevel = 1;
+var currentLevel = 100;
 var totalLevels = 4;
 
 var levelData;
@@ -61,6 +65,7 @@ function create() {
 	
 	
 	var collision_tiles = [];
+	//var collisionLayerIndex
 	levelData.layers[2].data.forEach(function(element){
 	if(element >= 0 && collision_tiles.indexOf(element) === -1){
 		collision_tiles.push(element);
@@ -79,13 +84,18 @@ function create() {
     //  We're going to be using physics, so enable the Arcade Physics system
     game.physics.startSystem(Phaser.Physics.ARCADE);
 
+	var playerData = levelData.layers.filter(function( obj ) {
+		return obj.name == "Player";
+	});
+	
 	// The player and its settings
-	player = game.add.sprite(levelData.playerStart.x, levelData.playerStart.y, 'dude');
+	player = game.add.sprite(playerData[0].objects[0].x, playerData[0].objects[0].y, 'dude');
 	
     //  We need to enable physics on the player
     game.physics.arcade.enable(player);
 
     //  Player physics properties. Give the little guy a slight bounce.
+	player.anchor.setTo(0.5,0.5);
     player.body.bounce.y = 0.05;
     player.body.gravity.y = 300;
     player.body.collideWorldBounds = true;
@@ -97,22 +107,28 @@ function create() {
     //  Finally some stars to collect
     stars = game.add.group();
 	enemies = game.add.group();
+	spikes = game.add.group();
 
     //  We will enable physics for any star that is created in this group
     stars.enableBody = true;
+	map.createFromObjects('Items', '', 'star', 0, true, false, stars);
+	
+	// Creating and loading our spikes
+	spikes.enableBody = true;
+	map.createFromObjects('Traps', '', 'spikeC', 0, true, false, spikes);
 
     //  Here we'll create 12 of them evenly spaced apart
-    for (var i = 0; i < levelData.starData.amount; i++)
-    {
-        //  Create a star inside of the 'stars' group
-        var star = stars.create(i * levelData.starData.spacing, 0, 'star');
+    // for (var i = 0; i < levelData.starData.amount; i++)
+    // {
+        // //  Create a star inside of the 'stars' group
+        // var star = stars.create(i * levelData.starData.spacing, 0, 'star');
 
-        //  Let gravity do its thing
-        star.body.gravity.y = 300;
+        // //  Let gravity do its thing
+        // star.body.gravity.y = 300;
 
-        //  This just gives each star a slightly random bounce value
-        star.body.bounce.y = 0.7 + Math.random() * 0.2;
-    }
+        // //  This just gives each star a slightly random bounce value
+        // star.body.bounce.y = 0.7 + Math.random() * 0.2;
+    // }
 
 	//enemies creation
 	
@@ -120,14 +136,20 @@ function create() {
 	// this.levelData.enemyData.forEach(function (element) {
 		// enemies.create(new EnemyGhost(0, game, element.x, element.y, element.direction, element.length, element.speed));
 	// }, this);
+	//map.createFromObjects('Enemies', '', 'ghost', 0, true, false, enemies);
 	
-	levelData.enemyData.forEach(function (element) {
+	
+	var enemyData = levelData.layers.filter(function( obj ) {
+		return obj.name == "Enemies";
+	});
+	
+	enemyData[0].objects.forEach(function (element){
 		var enemyProp = enemies.create(element.x, element.y, 'ghost');
 		enemyProp.anchor.setTo(0.5, 0.5);
 		enemyProp.scale.setTo(0.1);
-		direction = element.direction;
-		length = element.length;
-		speed = element.speed;
+		direction = element.properties.direction;
+		length = element.properties.length;
+		speed = element.properties.speed;
 		if(direction == 1)
 		{
 			enemyProp.ghostTween = game.add.tween(enemyProp).to({
@@ -139,6 +161,25 @@ function create() {
 			x: enemyProp.x + length}, speed, 'Linear', true, 0, 100, true);
 		}
 	}, this);
+	
+	// levelData.enemyData.forEach(function (element) {
+		// var enemyProp = enemies.create(element.x, element.y, 'ghost');
+		// enemyProp.anchor.setTo(0.5, 0.5);
+		// enemyProp.scale.setTo(0.1);
+		// direction = element.direction;
+		// length = element.length;
+		// speed = element.speed;
+		// if(direction == 1)
+		// {
+			// enemyProp.ghostTween = game.add.tween(enemyProp).to({
+			// y: enemyProp.y + length}, speed, 'Linear', true, 0, 100, true);
+		// }
+		// else if (direction == 2)
+		// {
+			// enemyProp.ghostTween = game.add.tween(enemyProp).to({
+			// x: enemyProp.x + length}, speed, 'Linear', true, 0, 100, true);
+		// }
+	// }, this);
 	
     //  The score
     scoreText = game.add.text(16, 16, 'score: 0', { fontSize: '24px', fill: '#000' });
@@ -164,7 +205,7 @@ function create() {
 	score = 0;
 	
 	//Creates the next level
-	scoreToWin = levelData.starData.amount * 10;
+	scoreToWin = 100;
 
 	
 	game.camera.follow(player);
@@ -179,6 +220,7 @@ function update() {
     //  Checks to see if the player overlaps with any of the stars, if he does call the collectStar function
     game.physics.arcade.overlap(player, stars, collectStar, null, this);
 	game.physics.arcade.overlap(player, enemies, ResetPlayer, null, this);
+	game.physics.arcade.overlap(player, spikes, ResetPlayer, null, this);
 	
     //  Reset the players velocity (movement)
     player.body.velocity.x = 0;
@@ -248,8 +290,8 @@ function collectStar (player, star) {
 
  function completedLevel(player, score) {
 	 if(score == 100) {
-	 succeededText.text = 'You Succeeded with: ' + score + ' points! \n        Press Enter to advance';
-	 scoreText.text = 'Level by ' + levelData.author;
+	 succeededText.text = 'You Succeeded with: ' + score + ' points! \n\n        Press Enter to advance';
+	 //scoreText.text = 'Level by ' + map.properties.author;
 	 } else {
 		 //Do nothing
 	 }

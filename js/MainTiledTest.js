@@ -25,6 +25,9 @@ function preload() {
 	this.load.text('tiledData4', 'assets/data/tiled4.json');
 	game.load.tilemap('tiledMap4', 'assets/data/tiled4.json', null, Phaser.Tilemap.TILED_JSON);
 	
+	this.load.text('tiledData100', 'assets/data/tiled100.json');
+	game.load.tilemap('tiledMap100', 'assets/data/tiled100.json', null, Phaser.Tilemap.TILED_JSON);
+	
 	game.load.image('tiles', 'assets/images/generic_platformer_tiles.png');
 	game.load.image('leverImage', 'assets/images/lever.png');
 	game.load.image('doorImage', 'assets/images/door.png');
@@ -62,7 +65,7 @@ var playerStartY;
 var scoreToGet = 100;
 
 //Level controller
-var currentLevel = 1;
+var currentLevel = 100;
 var totalLevels = 4;
 
 //Json data
@@ -222,7 +225,7 @@ function create() {
 	score = 0;
 	
 	//Creates the next level
-	scoreToWin = levelData.starData.amount * 10;
+	scoreToWin =  10;
 
 	game.time.events.loop(Phaser.Timer.SECOND, updateCounter, this);
 	
