@@ -3,8 +3,8 @@ var game = new Phaser.Game(800, 600, Phaser.AUTO, '', { preload: preload, create
 function preload() {
 
 	//Loading image assets
-    game.load.image('star', 'assets/star.png');
-    game.load.spritesheet('dude', 'assets/dude.png', 32, 48);
+    game.load.image('star', 'assets/images/star.png');
+    game.load.spritesheet('dude', 'assets/images/dude.png', 32, 48);
 	game.load.image('ghost', 'assets/images/ghost.png');
 	game.load.image('tiles', 'assets/images/generic_platformer_tiles.png');
 	game.load.image('leverImage', 'assets/images/lever.png');
@@ -141,6 +141,7 @@ function create() {
 		return obj.name == "Player";
 	});
 	
+	console.log(levelData);
 	// The player and its settings
 	player = game.add.sprite(playerData[0].objects[0].x, playerData[0].objects[0].y, 'dude');
 

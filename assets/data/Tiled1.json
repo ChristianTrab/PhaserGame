@@ -107,7 +107,7 @@
                  "type":"",
                  "visible":true,
                  "width":24,
-                 "x":1217.33333333333,
+                 "x":1217.33,
                  "y":475
                 }],
          "opacity":1,
@@ -233,8 +233,8 @@
                  "type":"",
                  "visible":true,
                  "width":32,
-                 "x":78.3333333333333,
-                 "y":606.833333333333
+                 "x":78.3333,
+                 "y":606.833
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -287,19 +287,19 @@
             {
              "10":
                 {
-                 "image":"..\/..\/..\/PhaserGame\/Platform_Phaser_Game\/assets\/images\/spike C.png",
+                 "image":"..\/..\/..\/PhaserGame2\/assets\/images\/spike C.png",
                  "imageheight":299,
                  "imagewidth":149
                 },
              "11":
                 {
-                 "image":"..\/..\/..\/PhaserGame\/Platform_Phaser_Game\/assets\/images\/spike D.png",
+                 "image":"..\/..\/..\/PhaserGame2\/assets\/images\/spike D.png",
                  "imageheight":326,
                  "imagewidth":159
                 },
              "12":
                 {
-                 "image":"..\/..\/..\/PhaserGame\/Platform_Phaser_Game\/assets\/images\/star.png",
+                 "image":"..\/..\/..\/PhaserGame2\/assets\/images\/star.png",
                  "imageheight":22,
                  "imagewidth":24
                 },
@@ -317,19 +317,19 @@
                 },
              "7":
                 {
-                 "image":"..\/..\/..\/PhaserGame\/Platform_Phaser_Game\/assets\/images\/ghost.png",
+                 "image":"..\/..\/..\/PhaserGame2\/assets\/images\/ghost.png",
                  "imageheight":364,
                  "imagewidth":348
                 },
              "8":
                 {
-                 "image":"..\/..\/..\/PhaserGame\/Platform_Phaser_Game\/assets\/images\/spike A.png",
+                 "image":"..\/..\/..\/PhaserGame2\/assets\/images\/spike A.png",
                  "imageheight":258,
                  "imagewidth":270
                 },
              "9":
                 {
-                 "image":"..\/..\/..\/PhaserGame\/Platform_Phaser_Game\/assets\/images\/spike B.png",
+                 "image":"..\/..\/..\/PhaserGame2\/assets\/images\/spike B.png",
                  "imageheight":195,
                  "imagewidth":184
                 }
@@ -339,7 +339,7 @@
         {
          "columns":9,
          "firstgid":784,
-         "image":"..\/..\/..\/PhaserGame\/Platform_Phaser_Game\/assets\/images\/dude.png",
+         "image":"..\/images\/dude.png",
          "imageheight":48,
          "imagewidth":288,
          "margin":0,
