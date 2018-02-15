@@ -67,11 +67,11 @@ var succeededText;
 var deathCount = 0;
 var deathCountText;
 var scoreToWin;
-var scoreToGet = 10;
+var scoreToGet = 90;
 
 //Level controller
 var currentLevel = 1;
-var totalLevels = 1;
+var totalLevels = 4;
 
 //Json data
 var levelData;
@@ -140,8 +140,7 @@ function create() {
 	playerData = levelData.layers.filter(function( obj ) {
 		return obj.name == "Player";
 	});
-	
-	console.log(levelData);
+
 	// The player and its settings
 	player = game.add.sprite(playerData[0].objects[0].x, playerData[0].objects[0].y, 'dude');
 
@@ -186,7 +185,7 @@ function create() {
 	//Using the enemy data properties to create and set enemy properties
 	enemyData[0].objects.forEach(function (element){
 		var enemyProp = enemies.create(element.x, element.y, 'ghost');
-		enemyProp.anchor.setTo(0.5, 0.5);
+		//enemyProp.anchor.setTo(0.5, 0.5);
 		enemyProp.scale.setTo(0.1);
 		direction = element.properties.direction;
 		length = element.properties.length;
@@ -208,7 +207,7 @@ function create() {
 	scoreText.fixedToCamera = true;
 	
 	//The timer
-	timerText = game.add.text(28, 45, 'Time: 0', {fontSize: '24px', fill: '#000'});
+	timerText = game.add.text(28, 45, 'Time: ' + counter, {fontSize: '24px', fill: '#000'});
 	timerText.fixedToCamera = true;
 
     //  Our controls.
@@ -265,7 +264,7 @@ function create() {
 	
 	if(currentLevel == 100){
 		displayLeaderBoard();
-		score = 10;
+		score = 100;
 	}
 	
 
@@ -384,10 +383,11 @@ function checkOverlap(spriteA, spriteB)
 
 function ResetPlayer()
 {
+	die = true;
 	death.play();
 	console.log("Killed");
 	deathCount++;
-	counter = 0;
+	//counter = 0;
 	toggleMusic();
 	game.state.restart();
 }
@@ -438,6 +438,8 @@ function updateCounter()
 			currentLevel++;	
 		}
 		else if(currentLevel == 100){
+			death = 0;
+			counter = 0;
 			currentLevel = 1;
 		}
 		else if (currentLevel >= totalLevels){

@@ -2,7 +2,7 @@
 <tileset name="objects" tilewidth="348" tileheight="364" tilecount="8" columns="0">
  <grid orientation="orthogonal" width="32" height="32"/>
  <tile id="7">
-  <image width="348" height="364" source="../../../PhaserGame2/assets/images/ghost.png"/>
+  <image width="348" height="364" source="../images/ghost.png"/>
  </tile>
  <tile id="8">
   <image width="270" height="258" source="../../../PhaserGame2/assets/images/spike A.png"/>
